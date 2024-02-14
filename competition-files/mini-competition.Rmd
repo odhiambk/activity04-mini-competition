@@ -5,4 +5,44 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidymodels)
+library(caTools)
 ```
+
+```{r}
+# Load the data
+news_data <- read.csv("~/R/STA_631/mini_competition01/news.csv")
+```
+
+```{r}
+#split the dataset
+set.seed(143)
+
+#Use 70% of dataset as training set and remaining 30% as testing set
+sample <- sample.split(news_data$SentimentHeadline, SplitRatio = 0.7)
+train  <- subset(news_data, sample == TRUE)
+test   <- subset(news_data, sample == FALSE)
+
+```
+
+```{r}
+# write the train set
+write_csv(train, "train_set.csv")
+```
+
+Exploratory analysis
+```{r}
+skimr::skim(news_data)
+```
+
+1. Convert the PublishDate to just month and date 
+2. Clean the social media popularity scores, set the negatives to 0s.
+3. Combine the social media scores into one variable.
+4. Look into correlation between Sentiment Headline and Sentiment title.
+
+```{r}
+# Clean the PublishDate
+
+```
+
