@@ -42,7 +42,30 @@ skimr::skim(news_data)
 4. Look into correlation between Sentiment Headline and Sentiment title.
 
 ```{r}
-# Clean the PublishDate
+# Convert PublishDate to POSIXct object
+datetime <- as.POSIXct(train$PublishDate, format = "%m/%d/%Y %H:%M")
+
+# Split into date and time
+train$date_part <- as.Date(datetime)
+train$time_part <- format(datetime, "%H:%M")
 
 ```
+
+```{r}
+train$Facebook <- ifelse(train$Facebook < 0, 0, train$Facebook)
+train$GooglePlus <- ifelse(train$GooglePlus < 0, 0, train$GooglePlus)
+train$LinkedIn <- ifelse(train$LinkedIn < 0, 0, train$LinkedIn)
+
+```
+
+```{r}
+train$social_media <- train$Facebook + train$GooglePlus + train$LinkedIn
+```
+
+```{r}
+clean_train <- train %>% 
+  select(Title, Headline, Topic, SentimentTitle, SentimentHeadline, date_part, time_part, social_media)
+```
+
+
 
