@@ -67,5 +67,69 @@ clean_train <- train %>%
   select(Title, Headline, Topic, SentimentTitle, SentimentHeadline, date_part, time_part, social_media)
 ```
 
+```{r}
+clean_train$Topic <- as.factor(clean_train$Topic)
+```
+
+```{r}
+# hist plots
+clean_train %>%
+  ggplot(aes(x = SentimentHeadline, color = Topic)) +
+  geom_freqpoly() +
+  labs(x = "Sentiment Headline", y = "Frequency") +
+  theme_minimal()
+```
+```{r}
+clean_train %>%
+  ggplot(aes(x = SentimentHeadline)) +
+  geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") +
+  labs(x = "Sentiment Headline", y = "Frequency") +
+  theme_minimal()
+```
+```{r}
+clean_train %>%
+  ggplot(aes(x = social_media)) +
+  geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") +
+  labs(x = "Social Media Popularity", y = "Frequency") +
+  theme_minimal()
+```
+
+
+
+```{r}
+# Fit the ANOVA model
+anova_model <- aov(SentimentHeadline ~ Topic, data = clean_train)
+
+# Summary of the ANOVA model
+summary(anova_model)
+```
+
+```{r}
+# Create a violin plot
+ggplot(clean_train, aes(x = Topic, y = SentimentHeadline)) +
+  geom_violin(trim = FALSE) +
+  geom_boxplot(width = 0.1, fill = "dodgerblue", color = "black", outlier.shape = NA) +  # Add boxplot without outliers
+  labs(x = "Topic", y = "Sentiment Headline Score") +
+  theme_minimal()
+
+```
+
+```{r}
+# Calculate the correlation coefficient
+correlation_coefficient <- cor(clean_train$SentimentHeadline, clean_train$SentimentTitle)
+correlation_test <- cor.test(clean_train$SentimentHeadline, clean_train$SentimentTitle)
+print(correlation_test)
+```
+```{r}
+# Calculate the correlation coefficient
+correlation_coefficient <- cor(clean_train$SentimentHeadline, clean_train$social_media)
+correlation_test <- cor.test(clean_train$SentimentHeadline, clean_train$social_media)
+print(correlation_test)
+```
+```{r}
+model <- lm(SentimentHeadline ~ SentimentTitle + social_media + num_Topic, data = clean_train)
+summary(model)
+
+```
 
 
